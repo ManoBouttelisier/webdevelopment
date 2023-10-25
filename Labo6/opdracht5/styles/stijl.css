@@ -1,0 +1,10 @@
+body {
+    font-size: 30px;
+}
+.icon {
+    background-image: url("../images/icon.png");
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 20px, 20px;
+    padding-left: 25px;
+}
