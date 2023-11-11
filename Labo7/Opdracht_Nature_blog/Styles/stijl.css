@@ -1,0 +1,41 @@
+body {
+    width: 95%;
+    margin: 0 auto;
+}
+section > header {
+    color: white;
+    font-family: Verdana, sans-serif;
+    font-size: 20px;
+    background-image: url("../images/header.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 80px;
+}
+nav {
+    background-color: #333333;
+}
+nav a{
+    color:lightgreen;
+    text-decoration: none;
+    border-right: 1px solid white;
+}
+
+article {
+    background-color: #eeeeee;
+    color: #444444;
+    font-family: Verdana, sans-serif;
+    font-size: 12px;
+}
+article > header{
+    color: #444444;
+    font-family:Verdana, sans-serif;
+    font-size: 18px;
+    text-decoration: underline;
+    padding: 1px;
+}
+
+footer {
+    margin: 5px;
+    font-size: 13px
+}
+
