@@ -1,0 +1,19 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    display:flex;
+}
+.container {
+    margin: 10px;
+    width: 50%;
+    border: 1px solid deeppink;
+    padding: 10px;
+}
+section {
+    display: block;
+}
+

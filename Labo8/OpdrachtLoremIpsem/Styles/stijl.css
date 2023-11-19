@@ -1,0 +1,13 @@
+* {
+    box-sizing: border-box
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+section {
+    width: 50%;
+    float:left;
+    border: 1px solid deeppink;
+    padding:10px;
+}
