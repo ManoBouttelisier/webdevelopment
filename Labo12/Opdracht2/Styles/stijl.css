@@ -1,0 +1,91 @@
+html {
+    background-color: dimgrey;
+    font-family: helvetica, sans-serif;
+    color:white;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+}
+* {
+    padding: 10px;
+}
+header{
+    background-color: goldenrod;
+    width:100%;
+    text-align: center;
+}
+nav {
+    background-color: darkgrey;
+    display:flex;
+    justify-content: space-between;
+    width: 100%;
+}
+nav a {
+    background-color: white;
+    border: 1px solid black;
+    color: goldenrod;
+    width: calc(100% - 10px); /* Adjust the width to accommodate the margin */
+    margin-right: 10px;
+}
+section {
+        margin:5px;
+        background-color: white;
+        width: 100%;
+        flex-direction: column;
+        flex:1;
+}
+main > section a{
+    border: 1px solid #333;
+    box-sizing: border-box;
+    width:100%;
+    border-radius:0;
+    color:grey;
+}
+main a {
+    display: flex;
+    justify-content: center;
+    color: grey;
+    width: 100%;
+}
+@media screen and (max-width: 700px){
+    main{
+        display:flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+    main section{
+        width:90%;
+        justify-content: center;
+    }
+    main a{
+        width: 50%;
+    }
+    main img {
+        width:100%;
+        box-sizing: border-box;
+        margin: 5px;
+    }
+
+}
+@media screen and (min-width: 700px) {
+    main {
+        display:flex;
+    }
+    main img {
+        width:100%;
+    }
+    section {
+        flex: 1;
+        padding: 20px;
+        margin: 5px;
+        box-sizing: border-box;
+    }
+}
+
+footer {
+    background-color: goldenrod;
+    width:100%;
+    text-align: center;
+    border-top: 10px solid black;
+}
