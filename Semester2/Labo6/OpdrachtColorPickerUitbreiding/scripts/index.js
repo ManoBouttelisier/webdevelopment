@@ -7,6 +7,9 @@ setup = () => {
     const saveButton = document.getElementById("SaveButton");
     saveButton.addEventListener('click', SaveColor);
 
+    const savedColors = document.getElementById("SavedColors");
+    savedColors.addEventListener('click', replaceColor);
+
     changeColor();
 };
 
@@ -53,6 +56,25 @@ const SaveColor = () => {
 
     colorBox.appendChild(deleteButton);
     document.getElementById("SavedColors").appendChild(colorBox);
+};
+
+const replaceColor = (event) => {
+    if (event.target.classList.contains('colorbox')) {
+        const rgbColor = event.target.style.backgroundColor.match(/\d+/g);
+        const red = rgbColor[0];
+        const green = rgbColor[1];
+        const blue = rgbColor[2];
+
+        const redSlider = document.getElementById("red");
+        const greenSlider = document.getElementById("green");
+        const blueSlider = document.getElementById("blue");
+
+        redSlider.value = red;
+        greenSlider.value = green;
+        blueSlider.value = blue;
+
+        changeColor();
+    }
 };
 
 window.addEventListener("load", setup);
