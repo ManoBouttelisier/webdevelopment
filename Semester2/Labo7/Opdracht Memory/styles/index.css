@@ -33,7 +33,3 @@ body {
 .card.matched {
     visibility: hidden; /* Hide matched cards */
 }
-
-.card.hidden {
-    background-image: url("../images/achterkant.jpg");
-}

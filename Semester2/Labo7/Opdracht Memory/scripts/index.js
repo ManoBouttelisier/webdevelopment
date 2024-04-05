@@ -1,116 +1,85 @@
-const AANTAL_HORIZONTAAL = 4;
-const AANTAL_VERTICAAL = 3;
-let isBusy = false;
-let count = 0;
-let gevonden = 0;
-let moves = 0;
+const setup = () => {
+    createCards();
+}
 
-const kaartNamen = ['kaart1.jpg', 'kaart2.jpg', 'kaart3.jpg', 'kaart4.jpg', 'kaart5.jpg', 'kaart6.jpg'];
+let global = {
+    AANTAL_HORIZONTAAL: 4,
+    AANTAL_VERTICAAL: 3,
+    AANTAL_KAARTEN: 6,
+    isBusy: false, // Variable to control user clicks during processing
+    selectedCards: [], // Array to keep track of selected cards
+    matchedPairs: 0 // Counter for matched pairs
+};
 
-const dubbeleKaarten = [];
-kaartNamen.forEach(kaart => {
-    dubbeleKaarten.push(kaart, kaart);
-});
+const kaarten = ['kaart1.jpg', 'kaart2.jpg', 'kaart3.jpg', 'kaart4.jpg', 'kaart5.jpg', 'kaart6.jpg'];
+const achterkant = 'achterkant.jpg';
 
-function shuffle(array) {
+window.addEventListener("load", setup);
+
+const createCards = () => {
+    const gameBoard = document.getElementById('game-board');
+    const shuffledCards = shuffleArray(kaarten.concat(kaarten));
+
+    shuffledCards.forEach((card, index) => {
+        const cardElement = document.createElement('div');
+        cardElement.classList.add('card');
+        cardElement.dataset.index = index;
+        cardElement.style.backgroundImage = `url(images/${achterkant})`;
+        cardElement.addEventListener('click', handleCardClick);
+        gameBoard.appendChild(cardElement);
+    });
+}
+
+const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
+    return array;
 }
 
-const setup = () => {
-    createBoard();
-}
+const handleCardClick = (event) => {
+    if (global.isBusy) return; // If processing, ignore clicks
+    const clickedCard = event.target;
 
-const createBoard = () => {
-    const board = document.getElementById('game-board');
-    shuffle(dubbeleKaarten);
-    for (let i = 0; i < AANTAL_HORIZONTAAL * AANTAL_VERTICAAL; i++) {
-        const cardElement = document.createElement('div');
-        cardElement.classList.add('card', 'hidden');
+    // If already matched or clicked on the same card twice, ignore
+    if (clickedCard.classList.contains('matched') || clickedCard.classList.contains('selected')) return;
 
-        const imgElement = document.createElement('img');
-        imgElement.src = 'images/' + dubbeleKaarten[i];
-        imgElement.width = 100;
-        imgElement.height = 150;
-        const kaartKlasse = dubbeleKaarten[i].split('.')[0];
-        imgElement.classList.add(kaartKlasse);
-        cardElement.appendChild(imgElement);
+    const index = parseInt(clickedCard.dataset.index);
+    const selectedCard = kaarten[index];
+    clickedCard.style.backgroundImage = `url(images/${selectedCard})`; // Show the front side
+    clickedCard.classList.add('selected');
+    global.selectedCards.push({ card: selectedCard, element: clickedCard });
 
-        board.appendChild(cardElement);
-
-        cardElement.addEventListener('click', handleClick);
-    }
-}
-
-const aangeklikt = (imgElement, cardElement) => {
-    moves++;
-    imgElement.style.display = 'block';
-    cardElement.style.background = 'none';
-    imgElement.classList.add('gekozenkaart');
-
-    count++;
-
-    if (count === 2 && gevonden !== 6) {
-        controleren();
-    }
-
-    if (gevonden === 6) {
-        stoppen();
-    }
-}
-
-const handleClick = (event) => {
-    const cardElement = event.currentTarget;
-    const imgElement = cardElement.querySelector('img');
-    if (!isBusy && !cardElement.classList.contains('correct')) {
-        isBusy = true;
-        aangeklikt(imgElement, cardElement);
-        isBusy = false;
-    }
-}
-
-const controleren = () => {
-    count = 0;
-    const gekozenKaarten = document.querySelectorAll('.gekozenkaart');
-
-    const eersteKaartKlassen = Array.from(gekozenKaarten[0].classList);
-    const tweedeKaartKlassen = Array.from(gekozenKaarten[1].classList);
-
-    const klassenOvereenkomen = eersteKaartKlassen.every(klasse => tweedeKaartKlassen.includes(klasse));
-
-    if (klassenOvereenkomen) {
-        console.log('Match gevonden!');
-        gevonden++;
-        gekozenKaarten.forEach(imgElement => {
-            imgElement.parentElement.removeEventListener('click', handleClick);
-            imgElement.classList.add('correct');
-        });
-    } else {
-        gekozenKaarten.forEach(imgElement => {
-            imgElement.classList.add('incorrect');
-        })
+    if (global.selectedCards.length === 2) {
+        global.isBusy = true; // Disable clicks during processing
         setTimeout(() => {
-            gekozenKaarten.forEach(imgElement => {
-                imgElement.style.display = 'none';
-                imgElement.parentElement.style.background = "";
-                imgElement.classList.remove('gekozenkaart');
-                imgElement.classList.remove("incorrect");
-            });
-        }, 1000);
+            checkForMatch();
+            global.isBusy = false; // Enable clicks after processing
+        }, 1000); // Adjust delay as needed
     }
-    gekozenKaarten.forEach(imgElement => {
-        imgElement.classList.remove('gekozenkaart');
-    });
-    isBusy = false;
 }
 
-const stoppen = () => {
-    setTimeout(() => {
-        alert(`Gefeliciteerd! Je hebt gewonnen in ${moves} zetten.`);
-        location.reload();
-    }, 1000);
+
+const checkForMatch = () => {
+    const [firstCard, secondCard] = global.selectedCards;
+    if (firstCard.card === secondCard.card) {
+        firstCard.element.classList.add('matched');
+        secondCard.element.classList.add('matched');
+        global.matchedPairs++;
+        if (global.matchedPairs === global.AANTAL_KAARTEN) {
+            // End game logic here
+            console.log("Game Over! All pairs matched.");
+        }
+    } else {
+        // If no match, flip cards back after a delay
+        setTimeout(() => {
+            firstCard.element.style.backgroundImage = `url(images/${achterkant})`;
+            secondCard.element.style.backgroundImage = `url(images/${achterkant})`;
+            firstCard.element.classList.remove('selected');
+            secondCard.element.classList.remove('selected');
+        }, 1000); // Adjust delay as needed
+    }
+    global.selectedCards = []; // Clear selected cards for next turn
 }
 
-document.addEventListener('DOMContentLoaded', setup);
