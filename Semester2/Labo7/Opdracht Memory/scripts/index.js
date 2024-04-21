@@ -18,7 +18,7 @@ window.addEventListener("load", setup);
 
 const createCards = () => {
     const gameBoard = document.getElementById('game-board');
-    const shuffledCards = shuffleArray(kaarten.concat(kaarten));
+    const shuffledCards = shuffle(dubbeleKaarten);
 
     shuffledCards.forEach((card, index) => {
         const cardElement = document.createElement('div');
@@ -29,13 +29,15 @@ const createCards = () => {
         gameBoard.appendChild(cardElement);
     });
 }
-
-const shuffleArray = (array) => {
+const dubbeleKaarten = [];
+kaarten.forEach(kaart => {
+    dubbeleKaarten.push(kaart, kaart);
+});
+function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
-    return array;
 }
 
 const handleCardClick = (event) => {
